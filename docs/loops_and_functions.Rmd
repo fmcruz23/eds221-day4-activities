@@ -1,0 +1,109 @@
+---
+title: "loops and functions"
+author: "Felicia Cruz"
+date: "8/12/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+### For loops revisited 
+```{r}
+weekdays <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+
+transects <- c("Transect A", "Transect B", "Transect C")
+
+weekdays_transects_matrix <- matrix(nrow = length(weekdays), ncol = length(transects))
+
+for (i in seq_along(transects)){
+  for(j in seq_along(weekdays)){
+    day_and_transect <- print(paste(weekdays[j], "-", transects[i]))
+    weekdays_transects_matrix[j, i] <- day_and_transect
+  }
+  
+}
+weekdays_transects_matrix
+```
+
+### Functions introduced
+```{r}
+force <- function(mass, acceleration){
+  newtons <- mass * acceleration
+  print(paste("The resulting force is", newtons, "Newtons"))
+}
+
+force(5, 15)
+```
+
+```{r}
+name_column <- function(df, number){
+if (number < 1 | number > ncol(df)){
+  stop("Please enter correct number")
+}
+  
+colnames(df[number])
+}
+
+name_column(mtcars, 500)
+```
+
+```{r}
+fish_parms <- data.frame(sci_name = c("Chanos chanos", "Sphyraena barracuda", "Caranx ignobilis"), 
+                         common_name = c("Milkfish", "Great barracuda", "Giant trevally"),
+                         a_est = c(0.0905, 0.0181, 0.0353),
+                         b_est = c(2.52, 3.27, 3.05))
+
+fish_weight <- function(fish_name, tot_length){
+  chosen_fish <- fish_parms %>% 
+    filter(common_name == fish_name) %>% 
+    select(-sci_name)
+  W <- chosen_fish$a_est * (tot_length ^ chosen_fish$b_est)
+  return(W)
+}
+
+
+fish_weight("Giant trevally", 10)
+
+fish_length_vector <- seq(from = 0, to = 100, by = 1)
+
+milkfish_weights <- fish_weight("Milkfish", fish_length_vector)
+milkfish_weights
+```
+
+```{r}
+wave_power_deep <- function(height, period){
+  P_deep <- 0.5 * height ^ 2 * period
+  return (P_deep)
+}
+
+wave_height_seq <- seq(from = 0, to = 3, by = 0.2)
+
+wave_power_deep(wave_height_seq, 8)
+```
+
+```{r}
+# shallow water function
+wave_power_shallow <- function(height, period){
+  P_shallow <- 0.81 * height ^ 2 * period
+  return (P_shallow)
+}
+
+# new function with if else based on wave height input 
+
+wave_power_calculation <- function(height, period){
+  if (height <= 12){
+    message("This is using the shallow water equation.")
+    wave_power_shallow(height, period)
+  }
+  else if (height > 12){
+    message("This is using the deep water equation")
+    wave_power_deep(height, period)
+  }
+}
+
+wave_power_calculation(15, 2)
+```
+
