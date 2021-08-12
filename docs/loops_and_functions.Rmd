@@ -93,17 +93,17 @@ wave_power_shallow <- function(height, period){
 
 # new function with if else based on wave height input 
 
-wave_power_calculation <- function(height, period){
-  if (height <= 12){
+wave_power_calculation <- function(height, depth, period){
+  if (depth <= 12){
     message("This is using the shallow water equation.")
     wave_power_shallow(height, period)
   }
-  else if (height > 12){
+  else if (depth > 12){
     message("This is using the deep water equation")
     wave_power_deep(height, period)
   }
 }
 
-wave_power_calculation(15, 2)
+wave_power_calculation(15, 10, 2)
 ```
 
